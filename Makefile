@@ -24,9 +24,10 @@ INCDIR = include
 # Bibliothèques SFML
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
-# Recherche automatique des fichiers sources (récursive)
+# Recherche automatique des fichiers sources
 SOURCES = $(shell find $(SRCDIR) -name "*.cpp")
 OBJECTS = $(SOURCES:.cpp=.o)
+TOTAL = $(words $(SOURCES))
 
 # Includes
 INCLUDES = -I$(INCDIR)
@@ -35,16 +36,34 @@ INCLUDES = -I$(INCDIR)
 all: $(TARGET)
 	@echo "$(GREEN)✓ Compilation terminée avec succès !$(NC)"
 
-# Création de l'exécutable
-$(TARGET): $(OBJECTS)
+# Compilation avec barre de progression
+$(TARGET):
+	@echo "$(CYAN)🔨 Compilation des sources...$(NC)"
+	@i=0; total=$(TOTAL); \
+	barlen=50; \
+	for src in $(SOURCES); do \
+		obj=$${src%.cpp}.o; \
+		mkdir -p $$(dirname $$obj); \
+		out=$$( \
+			$(CXX) $(CXXFLAGS) $(INCLUDES) -c $$src -o $$obj 2>&1 \
+		); \
+		if [ $$? -ne 0 ]; then \
+			echo "$$out"; exit 1; \
+		elif echo "$$out" | grep -q "warning"; then \
+			echo "$(YELLOW)[WARNING] $$src :$$out$(NC)"; \
+		fi; \
+		i=$$((i + 1)); \
+		percent=$$((i * 100 / total)); \
+		done_len=$$((barlen * i / total)); \
+		empty_len=$$((barlen - done_len)); \
+		bar_done=$$(printf "%0.s█" $$(seq 1 $$done_len)); \
+		bar_empty=$$(printf "%0.s " $$(seq 1 $$empty_len)); \
+		printf "\r\033[KProgress: [%-50s] %3d%%" "$$bar_done$$bar_empty" "$$percent"; \
+	done; \
+	echo ""
 	@echo "$(CYAN)🔗 Liaison de l'exécutable...$(NC)"
-	$(CXX) $(OBJECTS) -o $@ $(LIBS)
+	@$(CXX) $(OBJECTS) -o $@ $(LIBS)
 
-# Compilation des fichiers objets
-%.o: %.cpp
-	@echo "$(YELLOW)🔨 Compilation de $<...$(NC)"
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Nettoyage
 clean:
@@ -56,17 +75,16 @@ clean:
 # Recompilation complète
 rebuild: clean all
 
-# Debug (avec symboles de débogage)
+# Debug
 debug: CXXFLAGS += -g -DDEBUG
-debug: 
+debug:
 	@echo "$(BLUE)🔍 Compilation en mode debug...$(NC)"
 	@$(MAKE) $(TARGET)
 
-# Release (optimisation maximale)
+# Release
 release: CXXFLAGS += -O3 -DNDEBUG
 release:
 	@echo "$(PURPLE)🚀 Compilation en mode release...$(NC)"
 	@$(MAKE) $(TARGET)
 
-# Règles qui ne correspondent pas à des fichiers
 .PHONY: all clean rebuild debug release
