@@ -10,7 +10,6 @@
 void GraphicalInterface::GraphicalInterface::createBasicScene()
 {
     // createSprite(SceneState::BASIC, "fond", "assets/basic/fond.png", {0,0}, {1.5,1.5});
-
     createButton(SceneState::BASIC, "start_button", {"assets/basic/play_normal.png", "assets/basic/play_hover.png", "assets/basic/play_normal.png"}, {620, 250}, {1.5, 1.5}, {620, 250}, {895, 308});
     createButton(SceneState::BASIC, "exit_button", {"assets/basic/quit_normal.png", "assets/basic/quit_hover.png", "assets/basic/quit_normal.png"}, {620, 350}, {1.5, 1.5}, {620, 350}, {895, 408});
     
@@ -30,7 +29,7 @@ void GraphicalInterface::GraphicalInterface::events_Basic(sf::Event event)
     ButtonEventHandler(event);
 
     if (_buttons[SceneState::BASIC]["start_button"].state == ButtonState::CLICKED) {
-        _currentScene = SceneState::GAME;
+        _currentScene = SceneState::LEVELS;
     } else if (_buttons[SceneState::BASIC]["exit_button"].state == ButtonState::CLICKED) {
         _window.close();
     }   

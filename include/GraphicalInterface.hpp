@@ -29,6 +29,7 @@ namespace GraphicalInterface {
         BASIC,
         GAME,
         GAMEOVER,
+        LEVELS,
         END
     };
 
@@ -172,7 +173,14 @@ namespace GraphicalInterface {
             void events_Game(sf::Event event);
             void updates_Game();
             void draws_Game();
-            void map_event(sf::Event event);
+
+            // LEVELS SCENE
+            void createLevelsScene();
+            void events_Levels(sf::Event event);
+            void updates_Levels();
+            void draws_Levels();
+            void createLevelsText();
+            void createLevelsBox();
 
             //OTHERS
             void generateFire(int yellow, int green, int purple);

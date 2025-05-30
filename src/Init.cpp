@@ -23,6 +23,7 @@ void GraphicalInterface::GraphicalInterface::createScenes()
 {
     _currentScene = SceneState::BASIC;
     createBasicScene();
+    createLevelsScene();
     createGameScene();
 }
 
@@ -34,9 +35,6 @@ void GraphicalInterface::GraphicalInterface::EventHandler()
             _window.close();
         
         _scene_events[_currentScene](event);
-
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-            _currentScene = SceneState::BASIC;
     }
 }
 

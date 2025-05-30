@@ -31,8 +31,9 @@ void GraphicalInterface::GraphicalInterface::DrawButton()
 
 void GraphicalInterface::GraphicalInterface::ButtonEventHandler(sf::Event event)
 {
+    sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
     for (auto &button : _buttons[_currentScene]) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
+        mousePos = sf::Mouse::getPosition(_window);
         
         if (button.second.hitbox_up.first <= mousePos.x && mousePos.x <= button.second.hitbox_down.first &&
             button.second.hitbox_up.second <= mousePos.y && mousePos.y <= button.second.hitbox_down.second) {
@@ -45,4 +46,8 @@ void GraphicalInterface::GraphicalInterface::ButtonEventHandler(sf::Event event)
             button.second.state = ButtonState::NORMAL;
         }
     }
+
+    if (event.type == sf::Event::MouseButtonPressed)
+        std::cout << mousePos.x << ", " << mousePos.y << std::endl;
+
 }

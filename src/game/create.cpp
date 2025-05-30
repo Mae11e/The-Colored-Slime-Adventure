@@ -47,6 +47,10 @@ void GraphicalInterface::GraphicalInterface::createGameScene()
 
 void GraphicalInterface::GraphicalInterface::events_Game(sf::Event event)
 {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+        _window.setView(sf::View(sf::FloatRect(0, 0, _resolution.first, _resolution.second)));
+        _currentScene = SceneState::LEVELS;
+    }
     PlayerAnimationEventHandler(event);
     // std::cout << "player position :" << _playerposition.x << ", " << _playerposition.y << std::endl;
 }

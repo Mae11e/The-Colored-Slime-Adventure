@@ -15,7 +15,7 @@ Bref : **mangez**, **peignez** et **sautez** — c’est la clef du bonheur.
 
 1. Cloner le dépôt :
    ```bash
-   git clone <url-du-repo>
+   git clone <git@github.com:Mae11e/The-Colored-Slime-Adventure.git>
    ```
 2. Compiler le jeu :
    ```bash
@@ -30,7 +30,7 @@ Bref : **mangez**, **peignez** et **sautez** — c’est la clef du bonheur.
 
 ## 🎮 Commandes (FR)
 
-| Touche  | Action                 |
+| Touche | Action                 |
 |--------|------------------------|
 | Z      | Avancer vers le haut   |
 | Q      | Avancer vers la gauche |
@@ -38,6 +38,8 @@ Bref : **mangez**, **peignez** et **sautez** — c’est la clef du bonheur.
 | D      | Avancer vers la droite |
 | E      | Manger une flamme      |
 | Espace | Sauter                 |
+| A      | Changer de couleur     |
+| Echape | Retour en arrière      |
 
 ---
 
@@ -66,7 +68,7 @@ So: **eat**, **paint**, and **jump** — that’s the key to happiness.
 
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
+   git clone <git@github.com:Mae11e/The-Colored-Slime-Adventure.git>
    ```
 2. Build the game:
    ```bash
@@ -89,6 +91,8 @@ So: **eat**, **paint**, and **jump** — that’s the key to happiness.
 | D      | Move right           |
 | E      | Eat a flame          |
 | Space  | Jump                 |
+| A      | Change the color     |
+| Escape | Go back              |
 
 ---
 
