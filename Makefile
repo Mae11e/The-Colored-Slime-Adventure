@@ -64,7 +64,6 @@ $(TARGET):
 	@echo "$(CYAN)🔗 Liaison de l'exécutable...$(NC)"
 	@$(CXX) $(OBJECTS) -o $@ $(LIBS)
 
-
 # Nettoyage
 clean:
 	@echo "$(RED)🧹 Nettoyage des fichiers temporaires...$(NC)"
@@ -73,18 +72,6 @@ clean:
 	@echo "$(GREEN)✓ Nettoyage terminé !$(NC)"
 
 # Recompilation complète
-rebuild: clean all
+re: clean all
 
-# Debug
-debug: CXXFLAGS += -g -DDEBUG
-debug:
-	@echo "$(BLUE)🔍 Compilation en mode debug...$(NC)"
-	@$(MAKE) $(TARGET)
-
-# Release
-release: CXXFLAGS += -O3 -DNDEBUG
-release:
-	@echo "$(PURPLE)🚀 Compilation en mode release...$(NC)"
-	@$(MAKE) $(TARGET)
-
-.PHONY: all clean rebuild debug release
+.PHONY: all clean re

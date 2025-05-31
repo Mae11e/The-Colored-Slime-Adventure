@@ -183,8 +183,8 @@ namespace GraphicalInterface {
             void createLevelsBox();
 
             //OTHERS
-            void generateFire(int yellow, int green, int purple);
-            void generateEnemy(int yellow, int green, int purple);
+            void generateFire(int yellow, int green, int purple, int zone);
+            void generateEnemy(int yellow, int green, int purple, int zone);
     };
 }
 

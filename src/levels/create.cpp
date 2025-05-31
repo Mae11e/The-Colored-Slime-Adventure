@@ -64,8 +64,11 @@ void GraphicalInterface::GraphicalInterface::events_Levels(sf::Event event)
         _currentScene = SceneState::BASIC;
     }
     ButtonEventHandler(event);
-    if (_buttons[SceneState::LEVELS]["box_0"].state == CLICKED)
+    if (_buttons[SceneState::LEVELS]["box_0"].state == CLICKED) {
+        generateFire(2, 1, 3, 1000);
+        generateEnemy(2, 2, 4, 1000);
         _currentScene = SceneState::GAME;
+    }
 }
 
 void GraphicalInterface::GraphicalInterface::updates_Levels()

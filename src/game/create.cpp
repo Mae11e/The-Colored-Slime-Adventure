@@ -58,6 +58,7 @@ void GraphicalInterface::GraphicalInterface::events_Game(sf::Event event)
 void GraphicalInterface::GraphicalInterface::updates_Game()
 {
     UpdatePlayerAnimation();
+    UpdateAnimation();
     _player_animations[_currentPlayerColor][_currentPlayerState].sprite.setPosition(_playerposition);
 
     _texts[SceneState::GAME]["green"].text.setString(std::to_string(_nbofeach[GREEN]));
@@ -74,15 +75,16 @@ void GraphicalInterface::GraphicalInterface::updates_Game()
     _sprites[SceneState::GAME]["pink"].sprite.setPosition({_playerposition.x + 20, _playerposition.y - 80});
     _sprites[SceneState::GAME]["coins"].sprite.setPosition({_playerposition.x + 60, _playerposition.y - 80});
 
-    _window.setView(sf::View(sf::FloatRect(_playerposition.x - 170, _playerposition.y - 80, _resolution.first / 4, _resolution.second / 4)));
+    // _window.setView(sf::View(sf::FloatRect(_playerposition.x - 170, _playerposition.y - 80, _resolution.first / 4, _resolution.second / 4)));
 }
 
 void GraphicalInterface::GraphicalInterface::draws_Game()
 {
     _window.clear(sf::Color(175,237,252));
+    DrawAnimation();
+    DrawPlayerAnimation();
     for (const auto &sprite : _sprites[_currentScene]) {
             _window.draw(sprite.second.sprite);
     }
-    DrawPlayerAnimation();
     DrawText();
 }
