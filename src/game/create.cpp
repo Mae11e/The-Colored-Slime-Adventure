@@ -51,12 +51,21 @@ void GraphicalInterface::GraphicalInterface::events_Game(sf::Event event)
         _window.setView(sf::View(sf::FloatRect(0, 0, _resolution.first, _resolution.second)));
         _currentScene = SceneState::LEVELS;
     }
-    PlayerAnimationEventHandler(event);
+    if (_nbofeach[PlayerColor::PURPLE] == 0 && _nbofeach[PlayerColor::GREEN] == 0 && _nbofeach[PlayerColor::YELLOW] == 0)
+        _currentPlayerState = PlayerState::OVERLOAD;
+    if (_currentPlayerState != PlayerState::OVERLOAD)
+        PlayerAnimationEventHandler(event);
     // std::cout << "player position :" << _playerposition.x << ", " << _playerposition.y << std::endl;
 }
 
 void GraphicalInterface::GraphicalInterface::updates_Game()
 {
+    
+    if (_currentPlayerState == PlayerState::OVERLOAD)
+        _menu += 1;
+    if (_menu >= 75)
+        _currentScene = SceneState::LEVELS;
+
     UpdatePlayerAnimation();
     UpdateAnimation();
     _player_animations[_currentPlayerColor][_currentPlayerState].sprite.setPosition(_playerposition);
@@ -75,14 +84,14 @@ void GraphicalInterface::GraphicalInterface::updates_Game()
     _sprites[SceneState::GAME]["pink"].sprite.setPosition({_playerposition.x + 20, _playerposition.y - 80});
     _sprites[SceneState::GAME]["coins"].sprite.setPosition({_playerposition.x + 60, _playerposition.y - 80});
 
-    // _window.setView(sf::View(sf::FloatRect(_playerposition.x - 170, _playerposition.y - 80, _resolution.first / 4, _resolution.second / 4)));
+    _window.setView(sf::View(sf::FloatRect(_playerposition.x - 170, _playerposition.y - 80, _resolution.first / 4, _resolution.second / 4)));
 }
 
 void GraphicalInterface::GraphicalInterface::draws_Game()
 {
-    _window.clear(sf::Color(175,237,252));
-    DrawAnimation();
+    _window.clear(sf::Color(177,252,175));
     DrawPlayerAnimation();
+    DrawAnimation();
     for (const auto &sprite : _sprites[_currentScene]) {
             _window.draw(sprite.second.sprite);
     }

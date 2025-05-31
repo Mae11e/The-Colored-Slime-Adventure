@@ -22,10 +22,16 @@ void GraphicalInterface::GraphicalInterface::PlayerAnimationEventHandler(sf::Eve
         } else if (event.key.code == sf::Keyboard::D) {
             _playerposition.x += 1;
             _currentPlayerState = PlayerState::WALKING_RIGHT;
-        } else if (event.key.code == sf::Keyboard::E)
+        } else if (event.key.code == sf::Keyboard::E) {
             _currentPlayerState = PlayerState::ASPI;
-        else if (event.key.code == sf::Keyboard::Space)
+            check_fire();
+        } else if (event.key.code == sf::Keyboard::Space) {
+            check_enemies();
             _currentPlayerState = PlayerState::JUMP;
+        }
+        // } else if (event.key.code == sf::Keyboard::A) {
+        //  afficher la palette et changer couleur du slime
+        // }
     }
 
     if (event.type == sf::Event::KeyReleased)

@@ -65,14 +65,18 @@ void GraphicalInterface::GraphicalInterface::events_Levels(sf::Event event)
     }
     ButtonEventHandler(event);
     if (_buttons[SceneState::LEVELS]["box_0"].state == CLICKED) {
+        _menu = 0;
         generateFire(2, 1, 3, 1000);
         generateEnemy(2, 2, 4, 1000);
+        generateMap(30, 1000);
+        _currentPlayerState = PlayerState::STAND_BY;
         _currentScene = SceneState::GAME;
     }
 }
 
 void GraphicalInterface::GraphicalInterface::updates_Levels()
 {
+    _window.setView(sf::View(sf::FloatRect(0, 0, _resolution.first, _resolution.second)));
 }
 
 void GraphicalInterface::GraphicalInterface::draws_Levels()

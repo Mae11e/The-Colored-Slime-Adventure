@@ -95,6 +95,7 @@ namespace GraphicalInterface {
 
     class GraphicalInterface {
         private:
+            int _menu;
             std::pair<int, int> _resolution;
             sf::RenderWindow _window;
             SceneState _currentScene;
@@ -183,9 +184,12 @@ namespace GraphicalInterface {
             void createLevelsBox();
 
             //OTHERS
+            void generateMap(int number, int zone);
             void generateFire(int yellow, int green, int purple, int zone);
             void generateEnemy(int yellow, int green, int purple, int zone);
+            void check_fire();
+            void check_enemies();
     };
-}
+};
 
 #endif
