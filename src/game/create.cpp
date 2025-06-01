@@ -68,6 +68,8 @@ void GraphicalInterface::GraphicalInterface::updates_Game()
 
     UpdatePlayerAnimation();
     UpdateAnimation();
+    UpdateEnemyAI();
+    
     _player_animations[_currentPlayerColor][_currentPlayerState].sprite.setPosition(_playerposition);
 
     _texts[SceneState::GAME]["green"].text.setString(std::to_string(_nbofeach[GREEN]));

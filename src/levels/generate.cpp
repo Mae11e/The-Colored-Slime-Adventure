@@ -73,7 +73,6 @@ void GraphicalInterface::GraphicalInterface::check_enemies()
                 _currentPlayerState = PlayerState::HURT;
         }
     }
-    
     for (const std::string &name : toRemove) _animations[_currentScene].erase(name);
 }
 
@@ -81,13 +80,33 @@ void GraphicalInterface::GraphicalInterface::generateEnemy(int yellow, int green
 {
     for (int i = 0; yellow > i; i++) {
         createAnimation(SceneState::GAME, ("orange_enemy" + std::to_string(i)), "assets/game/Ennemies/carrot_down.png", 0.2, {32, 30}, {static_cast<float>(rand() % zone), static_cast<float>(rand() % zone)}, {0.8, 0.8});
-    };
+        auto& enemy = _animations[SceneState::GAME]["orange_enemy" + std::to_string(i)];
+        enemy.velocity = {0, 0};
+        enemy.isFollowingPlayer = false;
+        enemy.detectionRange = 100.0f;
+        enemy.moveSpeed = 0.5f;
+        enemy.lastRandomDirection = getRandomDirection();
+    }
+    
     for (int i = 0; purple > i; i++) {
         createAnimation(SceneState::GAME, ("purple_enemy" + std::to_string(i)), "assets/game/Ennemies/hop_down.png", 0.2, {32, 25}, {static_cast<float>(rand() % zone), static_cast<float>(rand() % zone)}, {0.8, 0.8});
-    };
+        auto& enemy = _animations[SceneState::GAME]["purple_enemy" + std::to_string(i)];
+        enemy.velocity = {0, 0};
+        enemy.isFollowingPlayer = false;
+        enemy.detectionRange = 120.0f;
+        enemy.moveSpeed = 0.7f;
+        enemy.lastRandomDirection = getRandomDirection();
+    }
+    
     for (int i = 0; green > i; i++) {
         createAnimation(SceneState::GAME, ("green_enemy" + std::to_string(i)), "assets/game/Ennemies/navet_down.png", 0.2, {32, 30}, {static_cast<float>(rand() % zone), static_cast<float>(rand() % zone)}, {0.8, 0.8});
-    };
+        auto& enemy = _animations[SceneState::GAME]["green_enemy" + std::to_string(i)];
+        enemy.velocity = {0, 0};
+        enemy.isFollowingPlayer = false;
+        enemy.detectionRange = 80.0f;
+        enemy.moveSpeed = 0.3f;
+        enemy.lastRandomDirection = getRandomDirection();
+    }
 }
 
 void  GraphicalInterface::GraphicalInterface::generateMap(int number, int zone)
@@ -120,4 +139,61 @@ void  GraphicalInterface::GraphicalInterface::generateMap(int number, int zone)
     for (; i > 0; i--) {
         createSprite(SceneState::GAME, ("yellow_flower_" + std::to_string(i)), "assets/game/map/yellow_flower.png", {static_cast<float>(rand() % zone), static_cast<float>(rand() % zone)}, {0.8, 0.8});
     };
+}
+
+void GraphicalInterface::GraphicalInterface::UpdateEnemyAI()
+{
+    if (_animations.find(_currentScene) == _animations.end())
+        return;
+
+    for (auto& [name, enemy] : _animations[_currentScene]) {
+        if (name.find("enemy") != std::string::npos) {
+            if (isPlayerInRange(enemy)) {
+                enemy.isFollowingPlayer = true;
+                moveEnemyTowardsPlayer(enemy);
+            } else {
+                enemy.isFollowingPlayer = false;
+                moveEnemyRandomly(enemy);
+            }
+            sf::Vector2f currentPos = enemy.sprite.getPosition();
+            enemy.sprite.setPosition(currentPos + enemy.velocity);
+        }
+    }
+}
+
+bool GraphicalInterface::GraphicalInterface::isPlayerInRange(const AnimationObject& enemy)
+{
+    sf::Vector2f enemyPos = enemy.sprite.getPosition();
+    sf::Vector2f playerPos = _playerposition;
+    float distance = sqrt(pow(playerPos.x - enemyPos.x, 2) + pow(playerPos.y - enemyPos.y, 2));
+    return distance <= enemy.detectionRange;
+}
+
+void GraphicalInterface::GraphicalInterface::moveEnemyTowardsPlayer(AnimationObject& enemy)
+{
+    sf::Vector2f enemyPos = enemy.sprite.getPosition();
+    sf::Vector2f playerPos = _playerposition;
+    sf::Vector2f direction = playerPos - enemyPos;
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+
+    if (length > 0) {
+        direction.x /= length;
+        direction.y /= length;
+    }
+    enemy.velocity = direction * enemy.moveSpeed;
+}
+
+void GraphicalInterface::GraphicalInterface::moveEnemyRandomly(AnimationObject& enemy)
+{
+    if (enemy.movementClock.getElapsedTime().asSeconds() >= 2.0f) {
+        enemy.movementClock.restart();
+        enemy.lastRandomDirection = getRandomDirection();
+    }
+    enemy.velocity = enemy.lastRandomDirection * enemy.moveSpeed * 0.3f;
+}
+
+sf::Vector2f GraphicalInterface::GraphicalInterface::getRandomDirection()
+{
+    float angle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14159f;
+    return sf::Vector2f(cos(angle), sin(angle));
 }

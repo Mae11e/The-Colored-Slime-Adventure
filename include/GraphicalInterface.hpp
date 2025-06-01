@@ -14,6 +14,7 @@
     #include <list>
     #include <memory>
     #include <SFML/Graphics.hpp>
+    #include <math.h>
     #include <functional>
     #include <fstream>
 
@@ -85,12 +86,20 @@ namespace GraphicalInterface {
         double speed;
         sf::Vector2f box_size;
         sf::Clock clock;
-
+    
         sf::Texture texture;
         sf::Sprite sprite;
-
+    
         std::list<std::string> frames;
         std::list<std::string>::iterator currentFrame;
+        
+        // NOUVEAUX MEMBRES POUR L'IA DES ENNEMIS
+        sf::Vector2f velocity;           
+        sf::Clock movementClock;         
+        bool isFollowingPlayer;      
+        float detectionRange;            
+        float moveSpeed;                 
+        sf::Vector2f lastRandomDirection;
     };
 
     class GraphicalInterface {
@@ -189,6 +198,12 @@ namespace GraphicalInterface {
             void generateEnemy(int yellow, int green, int purple, int zone);
             void check_fire();
             void check_enemies();
+
+            void UpdateEnemyAI();
+            void moveEnemyRandomly(AnimationObject& enemy);
+            void moveEnemyTowardsPlayer(AnimationObject& enemy);
+            bool isPlayerInRange(const AnimationObject& enemy);
+            sf::Vector2f getRandomDirection();
     };
 };
 
